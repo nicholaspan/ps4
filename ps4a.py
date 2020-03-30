@@ -1,5 +1,5 @@
 # Problem Set 4A
-# Name: <your name here>
+# Name: Nicholas Pan
 # Collaborators:
 # Time Spent: x:xx
 
@@ -50,15 +50,21 @@ def get_permutations(sequence):
 print(get_permutations('str'))
 
 if __name__ == '__main__':
-#    #EXAMPLE
-#    example_input = 'abc'
-#    print('Input:', example_input)
-#    print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
-#    print('Actual Output:', get_permutations(example_input))
-    
-#    # Put three example test cases here (for your sanity, limit your inputs
-#    to be three characters or fewer as you will have n! permutations for a 
-#    sequence of length n)
+# See below for 3 test cases
 
-    pass #delete this line and replace with your code here
+    test_input1 = 'nic'
+    print('Input: ', test_input1)
+    print('Expected Output:', ['nic', 'inc', 'icn', 'cin', 'cni', 'nci'])
+    print('Actual Output:', get_permutations(test_input1))
+
+    test_input2 = 'ang'
+    print('Input: ', test_input2)
+    print('Expected Output:', ['ang', 'nag', 'nga', 'gna', 'gan', 'agn'])
+    print('Actual Output:', get_permutations(test_input2))
+
+    test_input3 = 'abc'
+    print('Input:', test_input3)
+    print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
+    print('Actual Output:', get_permutations(test_input3))
+
 
