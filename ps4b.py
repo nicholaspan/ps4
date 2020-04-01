@@ -267,8 +267,6 @@ class CiphertextMessage(Message):
         decryted_message = self.apply_shift(best_shift)
         return (best_shift, decrypted_message)
         
-        pass #delete this line and replace with your code here
-
 if __name__ == '__main__':
 
     #Example test case (PlaintextMessage)
