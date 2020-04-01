@@ -2,6 +2,7 @@
 # Name: Nicholas Pan
 
 import copy
+import re
 import string
 
 ### HELPER CODE ###
@@ -70,7 +71,7 @@ class Message(object):
             self.valid_words (list, determined using helper function load_words)
         '''
         self.message_text = text
-        self.valid_words = WORDLIST_FILENAME
+        self.valid_words = load_words(WORDLIST_FILENAME)
 
     def get_message_text(self):
         '''
@@ -170,7 +171,7 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-    
+        Message.__init__(self, text)    # Init with parent class Message
         self.shift = shift
         self.encryption_dict = self.build_shift_dict(shift)
         self.message_text_encrypted = self.apply_shift(shift)
@@ -211,6 +212,11 @@ class PlaintextMessage(Message):
         Returns: nothing
         '''
         self.shift = shift
+        # Use the init method rather than redefining for abstraction
+        # PlaintextMessage.__init__(self, self.get_message_text, shift)
+        
+        self.encryption_dict = self.build_shift_dict(shift)
+        self.message_text_encrypted = self.apply_shift(shift)
 
 
 class CiphertextMessage(Message):
@@ -224,7 +230,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        # all of this is inherited from Message parent class
+        Message.__init__(self, text)    # Init with parent class Message
 
     def decrypt_message(self):
         '''
@@ -242,22 +248,35 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
+
+        print("We are trying to decrypt... "+self.message_text)
+        # Run through 26 shifts...
+        shift_counter=1
+        shift_to_valid_words = {}
+        for x in range(26):
+            decrypted_message = self.apply_shift(shift_counter)
+            # Uses re library to split string into list of words
+            decrypted_message_split = re.split('[^a-zA-Z]', decrypted_message)
+            num_valid_words=0
+            for y in decrypted_message_split:
+                if is_word(self.valid_words, y):
+                    num_valid_words = num_valid_words + 1
+            shift_to_valid_words[shift_counter] = num_valid_words
+            shift_counter = shift_counter + 1
+        best_shift = max(shift_to_valid_words, key=shift_to_valid_words.get)
+        decryted_message = self.apply_shift(best_shift)
+        return (best_shift, decrypted_message)
+        
         pass #delete this line and replace with your code here
 
 if __name__ == '__main__':
 
-#    #Example test case (PlaintextMessage)
-#    plaintext = PlaintextMessage('hello', 2)
-#    print('Expected Output: jgnnq')
-#    print('Actual Output:', plaintext.get_message_text_encrypted())
-#
-#    #Example test case (CiphertextMessage)
-#    ciphertext = CiphertextMessage('jgnnq')
-#    print('Expected Output:', (24, 'hello'))
-#    print('Actual Output:', ciphertext.decrypt_message())
+    #Example test case (PlaintextMessage)
+    plaintext = PlaintextMessage('hello', 2)
+    print('Expected Output: jgnnq')
+    print('Actual Output:', plaintext.get_message_text_encrypted())
 
-    #TODO: WRITE YOUR TEST CASES HERE
-
-    #TODO: best shift value and unencrypted story 
-    
-    pass #delete this line and replace with your code here
+    #Example ciphertext test case (CiphertextMessage)
+    ciphertext = CiphertextMessage('jgnnq')
+    print('Expected Output:', (24, 'hello'))
+    print('Actual Output:', ciphertext.decrypt_message())
