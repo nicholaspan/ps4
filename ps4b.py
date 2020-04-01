@@ -1,8 +1,7 @@
 # Problem Set 4B
-# Name: <your name here>
-# Collaborators:
-# Time Spent: x:xx
+# Name: Nicholas Pan
 
+import copy
 import string
 
 ### HELPER CODE ###
@@ -70,7 +69,8 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = WORDLIST_FILENAME
 
     def get_message_text(self):
         '''
@@ -78,7 +78,7 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +87,8 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        valid_words_copy = self.valid_words
+        return valid_words_copy
 
     def build_shift_dict(self, shift):
         '''
@@ -103,7 +104,31 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+
+        shift_dict_upper = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'G': 7, 'H': 8, 'I': 9, 'J': 10, 'K': 11, 'L': 12, 'M': 13, 'N': 14, 'O': 15, 'P': 16, 'Q': 17, 'R': 18, 'S': 19, 'T': 20, 'U': 21, 'V': 22, 'W': 23, 'X': 24, 'Y': 25, 'Z': 26}
+        shift_dict_lower = {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, 'g': 7, 'h': 8, 'i': 9, 'j': 10, 'k': 11, 'l': 12, 'm': 13, 'n': 14, 'o': 15, 'p': 16, 'q': 17, 'r': 18, 's': 19, 't': 20, 'u': 21, 'v': 22, 'w': 23, 'x': 24, 'y': 25, 'z': 26}
+        shifted_dict_upper = {}
+        shifted_dict_lower = {}
+
+        for x in shift_dict_lower:
+            shifted_dict_lower[x] = shift_dict_lower[x] + shift
+            if shifted_dict_lower[x] > 26:
+                shifted_dict_lower[x] = shifted_dict_lower[x] - 26
+        
+        final_shift_dict = {}
+        for x in shift_dict_lower:
+            for y in shifted_dict_lower:
+                if shifted_dict_lower[y] == shift_dict_lower[x]:
+                    final_shift_dict.update({y:x})
+
+        temp_dict = {}
+
+        for x in final_shift_dict:
+            temp_dict.update({x.upper():final_shift_dict[x].upper()})
+
+        final_shift_dict.update(temp_dict)
+
+        return final_shift_dict
 
     def apply_shift(self, shift):
         '''
@@ -117,7 +142,17 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+
+        special_chars = " !@#$%^&*()-_+={}[]|\:;'<>?,./\""
+        shift_dict = self.build_shift_dict(shift)
+        new_message = ''
+        for char in self.message_text:
+            if char not in special_chars:
+                new_message = new_message + shift_dict[char]
+            else:
+                new_message = new_message + char
+
+        return new_message
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -135,7 +170,10 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        pass #delete this line and replace with your code here
+    
+        self.shift = shift
+        self.encryption_dict = self.build_shift_dict(shift)
+        self.message_text_encrypted = self.apply_shift(shift)
 
     def get_shift(self):
         '''
@@ -143,7 +181,7 @@ class PlaintextMessage(Message):
         
         Returns: self.shift
         '''
-        pass #delete this line and replace with your code here
+        return self.shift
 
     def get_encryption_dict(self):
         '''
@@ -151,7 +189,8 @@ class PlaintextMessage(Message):
         
         Returns: a COPY of self.encryption_dict
         '''
-        pass #delete this line and replace with your code here
+        copy_encryption_dict = copy.deepcopy(self.encryption_dict)
+        return copy_encryption_dict
 
     def get_message_text_encrypted(self):
         '''
@@ -159,7 +198,7 @@ class PlaintextMessage(Message):
         
         Returns: self.message_text_encrypted
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text_encrypted
 
     def change_shift(self, shift):
         '''
@@ -171,7 +210,7 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        pass #delete this line and replace with your code here
+        self.shift = shift
 
 
 class CiphertextMessage(Message):
@@ -185,7 +224,7 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        # all of this is inherited from Message parent class
 
     def decrypt_message(self):
         '''

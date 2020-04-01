@@ -1,7 +1,5 @@
 # Problem Set 4A
 # Name: Nicholas Pan
-# Collaborators:
-# Time Spent: x:xx
 
 def get_permutations(sequence):
     '''
@@ -46,8 +44,6 @@ def get_permutations(sequence):
                 list_perms.append(new_perm)
         list_perms = list(dict.fromkeys(list_perms).keys())
         return list_perms
-
-print(get_permutations('str'))
 
 if __name__ == '__main__':
 # See below for 3 test cases
